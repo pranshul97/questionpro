@@ -28,20 +28,24 @@ public class TopStoriesServiceImpl implements TopStoriesService {
 	private RestTemplate restTemplate = new RestTemplate();
 	
 	@Override
-	public Optional<List<Long>> topStoriesSearch() {
+	public Optional<List<TopStoryDTO>> topStoriesSearch() {
 		// TODO Auto-generated method stub
 		
-		Optional<List<Long>> result = searchBaseApi();
+		Optional<List<Integer>> topStoriesResult = searchBaseApi();
 		
+		if (!topStoriesResult.isEmpty()) {
+			Optional<List<TopStoryDTO>> storiesDataResult = searchStoriesData(topStoriesResult.get());
+			if (!storiesDataResult.isEmpty()) {
+				return storiesDataResult;
+			}
+		}
 		
-
-		
-		return result.isEmpty()?Optional.empty():result;
+		return Optional.empty();
 	}
 	
 	@SuppressWarnings("unchecked")
-	private Optional<List<Long>> searchBaseApi() {
-		List<Long> result = null;
+	private Optional<List<Integer>> searchBaseApi() {
+		List<Integer> result = null;
 		logger.info("Inside searchBaseApi method");
 		try {
 			result = new ArrayList<>();
@@ -71,14 +75,31 @@ public class TopStoriesServiceImpl implements TopStoriesService {
 		return Optional.of(result);
 	}
 	
-	private Optional<List<TopStoryDTO>> searchStoriesData(List<Long> result){
+	private Optional<List<TopStoryDTO>> searchStoriesData(List<Integer> result){
+		List<TopStoryDTO> topStories = new ArrayList<>();
+		logger.info("Inside searchStoriesData function");
+		try {
+			for(int itemNo = 0; itemNo<10; itemNo++) {
+				Optional<TopStoryDTO> topStoryData = itemSearch(result.get(itemNo));
+				
+				if (!topStoryData.isEmpty()) {
+					logger.info("Added Story data to list");
+					topStories.add(topStoryData.get());
+				} else {
+					logger.warn("Data not retrieved for item number {0}", result.get(itemNo));
+				}
+				
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.warn("Exception occured during fetching story data {0}", e.getMessage());
+		}
 		
-		
-		return Optional.empty();
+		return topStories.isEmpty()?Optional.empty():Optional.of(topStories);
 		
 	}
 	
-	private Optional<TopStoryDTO> itemSearch(long itemNo) {
+	private Optional<TopStoryDTO> itemSearch(int itemNo) {
 		TopStoryDTO topStory = null;
 		Item item = null;
 		try {
@@ -88,13 +109,17 @@ public class TopStoriesServiceImpl implements TopStoriesService {
 			
 			if (response.getStatusCode().is2xxSuccessful()) {
 				item = response.getBody();
+				
 				if(item != null) {
+					
 					topStory = new TopStoryDTO();
 					topStory.setScore(item.getScore());
 					topStory.setTime(item.getTime());
 					topStory.setTitle(item.getTitle());
 					topStory.setURL(item.getUrl());
 					topStory.setUser(item.getBy());
+					
+					logger.info("Data retrieved for item number %s", itemNo);
 				}
 				else {
 					logger.warn("No data received for item number %s by item Search api" , itemNo);
@@ -106,6 +131,8 @@ public class TopStoriesServiceImpl implements TopStoriesService {
 		} catch (Exception e) {
 			logger.error("Exception in itemSearch function %s", e.getMessage());
 		}
+		logger.info("itemSearch function completed");
+		
 		return (topStory != null)?Optional.of(topStory):Optional.empty();
 	}
 
