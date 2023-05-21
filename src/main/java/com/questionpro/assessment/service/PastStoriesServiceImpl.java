@@ -21,6 +21,7 @@ public class PastStoriesServiceImpl implements PastStoriesService {
 	
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(QuestionproApplication.class);
 	
+	//business logic to get all past stories data from db
 	@Override
 	public Optional<List<StoryData>> fetchPastStories() {
 		logger.info("Inside fetchPastStories method to get all data");

@@ -21,6 +21,7 @@ public class TopStoriesControllerImpl implements TopStoriesController {
 	@Autowired
 	private TopStoriesService topStoriesService;
 	
+	//Controller method to fetch top 10 stories fetched from hacker api
 	@GetMapping("/top-stories")
 	@Override
 	@Cacheable(value = "topStoriesCache")

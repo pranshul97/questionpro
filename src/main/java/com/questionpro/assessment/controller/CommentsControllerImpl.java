@@ -24,6 +24,7 @@ public class CommentsControllerImpl implements CommentsController{
 	
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(QuestionproApplication.class);
 	
+	//controller for comments api which returns top 10 comments based on number of child comments on each
 	@GetMapping("/comments")
 	@Override
 	public ResponseEntity<Object> comments(int itemNumber){

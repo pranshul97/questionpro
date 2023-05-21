@@ -49,6 +49,7 @@ public class TopStoriesServiceImpl implements TopStoriesService {
 		return Optional.empty();
 	}
 	
+	//Logic to fetch all top stories from hacker-api
 	@SuppressWarnings("unchecked")
 	private Optional<List<Integer>> searchBaseApi() {
 		List<Integer> result = null;
@@ -81,6 +82,7 @@ public class TopStoriesServiceImpl implements TopStoriesService {
 		return Optional.of(result);
 	}
 	
+	//logic to process top 10 top-stories
 	private Optional<List<TopStoryDTO>> searchStoriesData(List<Integer> result){
 		List<TopStoryDTO> topStories = new ArrayList<>();
 		logger.info("Inside searchStoriesData function");
@@ -105,6 +107,7 @@ public class TopStoriesServiceImpl implements TopStoriesService {
 		
 	}
 	
+	//Logic to fetch data from hacker-api by passing id of it and save the data in DB
 	private Optional<TopStoryDTO> itemSearch(int itemNo) {
 		TopStoryDTO topStory = null;
 		Item item = null;

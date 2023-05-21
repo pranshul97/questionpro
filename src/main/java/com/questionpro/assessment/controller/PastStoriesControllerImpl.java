@@ -18,6 +18,7 @@ public class PastStoriesControllerImpl implements PastStoriesController {
 	@Autowired
 	private PastStoriesService pastStoryService;
 	
+	//Controller method to fetch all stories shared in the past by /top-stories api
 	@SuppressWarnings("unchecked")
 	@GetMapping("/past-stories")
 	@Override

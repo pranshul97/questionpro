@@ -59,6 +59,7 @@ public class CommentsServiceImpl implements CommentsService {
 		return Optional.empty();
 	}
 	
+	//Logic to fetch data for given story number
 	private Optional<Item> itemSearch(int itemNumber){
 		try {
 			Item item = null;
@@ -84,6 +85,7 @@ public class CommentsServiceImpl implements CommentsService {
 		return Optional.empty();
 	}
 	
+	//logic to fetch number of child comments on each comment of provided story and then share sort based on highest number of child comments
 	private List<CommentsDTO> processCommentsBasedOnChildComments(Item item){
 		logger.info("Inside method processCommentsBasedOnChildComments method");
 		List<Integer> commentIds = item.getKids();
