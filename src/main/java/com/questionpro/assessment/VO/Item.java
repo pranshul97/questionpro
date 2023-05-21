@@ -1,5 +1,6 @@
 package com.questionpro.assessment.VO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Item {
@@ -8,9 +9,9 @@ public class Item {
 	
 	String descendants;
 	
-	long id;
+	int id;
 	
-	List<Long> kids;
+	List<Integer> kids;
 	
 	long score;
 	
@@ -20,7 +21,17 @@ public class Item {
 	
 	String type;
 	
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
 	String url;
+	
+	String text;
 
 	public String getBy() {
 		return by;
@@ -38,19 +49,22 @@ public class Item {
 		this.descendants = descendants;
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public List<Long> getKids() {
+	public List<Integer> getKids() {
+		if (kids == null) {
+			kids = new ArrayList<>();
+		}
 		return kids;
 	}
 
-	public void setKids(List<Long> kids) {
+	public void setKids(List<Integer> kids) {
 		this.kids = kids;
 	}
 
