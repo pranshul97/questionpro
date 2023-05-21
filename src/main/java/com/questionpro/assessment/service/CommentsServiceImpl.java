@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,8 @@ public class CommentsServiceImpl implements CommentsService {
 	@Value("${basePathURL}")
 	private String basePathURL;
 	
-	RestTemplate restTemplate = new RestTemplate();
+	@Autowired
+	RestTemplate restTemplate;
 	
 	@Override
 	public Optional<List<CommentsDTO>> fetchComments(int itemNumber) {
@@ -98,10 +100,10 @@ public class CommentsServiceImpl implements CommentsService {
 					logger.info("No data received for commentId %s ", commentId);
 				}
 			}
-			logger.info("Sorting items data based on number of comments");
+			logger.info("Sorting items data based on number of comments in reverse order");
 			commentsList.sort((i1, i2) -> i2.getKids().size()-i1.getKids().size());
 			
-			commentsList.forEach(i -> System.out.println("Itemid = " + i.getId() + " & Number of comments = " + i.getKids().size()));
+			//commentsList.forEach(i -> System.out.println("Itemid = " + i.getId() + " & Number of comments = " + i.getKids().size()));
 			
 			for ( Item itemIt : commentsList ) {
 				if ( commentsReturnList.size()>=10)

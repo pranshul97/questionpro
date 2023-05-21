@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import com.questionpro.assessment.QuestionproApplication;
 import com.questionpro.assessment.DTO.TopStoryDTO;
 import com.questionpro.assessment.VO.Constants;
 import com.questionpro.assessment.VO.Item;
+import com.questionpro.assessment.repository.PastStoryData;
 
 import ch.qos.logback.classic.Logger;
 
@@ -22,10 +24,14 @@ public class TopStoriesServiceImpl implements TopStoriesService {
 
 	private static final Logger logger = (Logger) LoggerFactory.getLogger(QuestionproApplication.class);
 	
+	@Autowired
+	private PastStoryData storeDataRepo;
+	
 	@Value("${basePathURL}")
 	private String basePathURL;
 	
-	private RestTemplate restTemplate = new RestTemplate();
+	@Autowired
+	private RestTemplate restTemplate;
 	
 	@Override
 	public Optional<List<TopStoryDTO>> topStoriesSearch() {
@@ -118,6 +124,16 @@ public class TopStoriesServiceImpl implements TopStoriesService {
 					topStory.setTitle(item.getTitle());
 					topStory.setURL(item.getUrl());
 					topStory.setUser(item.getBy());
+					
+					com.questionpro.assessment.entity.StoryData storyData = new com.questionpro.assessment.entity.StoryData();
+					storyData.setId(itemNo);
+					storyData.setScore(item.getScore());
+					storyData.setTime(item.getTime());
+					storyData.setTitle(item.getTitle());
+					storyData.setURL(item.getUrl());
+					storyData.setUser(item.getBy());
+					
+					storeDataRepo.saveStoryData(storyData);
 					
 					logger.info("Data retrieved for item number %s", itemNo);
 				}
